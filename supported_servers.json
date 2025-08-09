@@ -792,5 +792,11 @@
     "description": "KriemRO",
     "hpAddress": "010DCE10",
     "nameAddress": "010DF5D8"
+  },
+  {
+    "name": "Grappler",
+    "description": "Grappler",
+    "hpAddress": "0157EFE4",
+    "nameAddress": "01581C30"
   }
 ]
