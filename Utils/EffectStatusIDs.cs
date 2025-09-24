@@ -358,9 +358,17 @@ namespace _4RTools.Utils
         // Star Emperor(https://irowiki.org/wiki/Star_Emperor)
         EFST_SKY_ENCHANT = 1392,
         EFST_UNIVERSESTANCE = 1039,
+        EFST_SUNSTANCE = 1040,
+        EFST_LIGHTOFSUN = 1036,
 
         // Homunculus
         EFST_PYROCLASTIC = 607,
         EFST_TEMPERING = 1343,
+        
+        //  Special
+        EFST_ODINS_POWER = 583,
+		
+		// All Third
+		EFST_FULL_THROTTLE = 720,
     }
 }
