@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>FourRVivi.Core</RootNamespace>
+    <AssemblyName>4rVivi.Core</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Nefarius.ViGEm.Client" Version="1.21.256" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Data\gamedata.json" />
+    <EmbeddedResource Include="Data\gamedata.json" />
+    <EmbeddedResource Include="Data\map_mobs.json" />
+    <EmbeddedResource Include="Data\idnum2itemresnametable.txt" />
+    <EmbeddedResource Include="Data\classdata.json" />
+    <None Update="Data\RegionProfiles.json"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></None>
+  </ItemGroup>
+</Project>

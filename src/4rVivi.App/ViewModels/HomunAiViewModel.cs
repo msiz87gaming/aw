@@ -1,0 +1,94 @@
+using System.Collections.ObjectModel;
+using System.IO;
+using System.IO.Compression;
+using Avalonia;
+using Avalonia.Platform;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using FourRVivi.Core.Settings;
+using FourRVivi.Core.Tools;
+
+namespace FourRVivi.App.ViewModels;
+
+/// <summary>Bundles Dr. Azzy's homunculus/merc AI. Pick the game folder, review files, Apply → copies into &lt;game&gt;\AI\USER_AI.</summary>
+public sealed partial class HomunAiViewModel : ViewModelBase
+{
+    private readonly SettingsStore _settings;
+    public ObservableCollection<string> Files { get; } = new();
+    public ObservableCollection<AzzyOption> Options { get; } = new(AzzyConfig.Defaults());
+
+    [ObservableProperty] private string _gameFolder = "";
+    [ObservableProperty] private string _status = "Paste your RO game folder (the one with the client .exe), review the AzzyAI files, then Apply.";
+
+    public HomunAiViewModel(SettingsStore settings)
+    {
+        _settings = settings;
+        _gameFolder = settings.Current.GameFolder;
+        LoadFileList();
+    }
+
+    partial void OnGameFolderChanged(string value)
+    {
+        _settings.Current.GameFolder = value; _settings.Save();
+        if (!string.IsNullOrWhiteSpace(value) && Directory.Exists(value)) CopyToGame(value);
+    }
+
+    private void LoadFileList()
+    {
+        try
+        {
+            using var src = AssetLoader.Open(new Uri("avares://4rVivi/Assets/azzyai.zip"));
+            using var mem = new MemoryStream();
+            src.CopyTo(mem); mem.Position = 0;
+            using var zip = new ZipArchive(mem, ZipArchiveMode.Read);
+            foreach (var e in zip.Entries.Where(e => e.Name.Length > 0)) Files.Add(e.FullName);
+        }
+        catch (Exception ex) { Status = "Could not read bundled AzzyAI: " + ex.Message; }
+    }
+
+    [RelayCommand] private void Apply()
+    {
+        if (string.IsNullOrWhiteSpace(GameFolder) || !Directory.Exists(GameFolder))
+        { Status = "Set a valid game folder first."; return; }
+        CopyToGame(GameFolder);
+    }
+
+    [RelayCommand] private void ApplyConfig()
+    {
+        if (string.IsNullOrWhiteSpace(GameFolder) || !Directory.Exists(GameFolder)) { Status = "Set a valid game folder first."; return; }
+        try
+        {
+            string dir = Path.Combine(GameFolder, "AI", "USER_AI");
+            Directory.CreateDirectory(dir);
+            File.WriteAllText(Path.Combine(dir, "AzzyConfig.lua"), AzzyConfig.ToLua(Options));
+            Status = $"Saved {Options.Count} AzzyAI settings to {dir}\\AzzyConfig.lua.";
+        }
+        catch (Exception ex) { Status = "Save config failed: " + ex.Message; }
+    }
+
+    private void CopyToGame(string folder)
+    {
+        try
+        {
+            string aiDir = Path.Combine(folder, "AI");
+            Directory.CreateDirectory(aiDir);
+            using var src = AssetLoader.Open(new Uri("avares://4rVivi/Assets/azzyai.zip"));
+            using var mem = new MemoryStream();
+            src.CopyTo(mem); mem.Position = 0;
+            using var zip = new ZipArchive(mem, ZipArchiveMode.Read);
+            int n = 0;
+            foreach (var e in zip.Entries)
+            {
+                if (e.Name.Length == 0) continue;
+                string dest = Path.Combine(aiDir, e.FullName.Replace('/', Path.DirectorySeparatorChar));
+                Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
+                using var es = e.Open();
+                using var fs = File.Create(dest);
+                es.CopyTo(fs);
+                n++;
+            }
+            Status = $"Copied {n} AzzyAI files to {aiDir}. Enable in-game (@aimode) / restart your homunculus.";
+        }
+        catch (Exception ex) { Status = "Copy failed: " + ex.Message; }
+    }
+}

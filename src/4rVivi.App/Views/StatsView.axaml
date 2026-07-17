@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="clr-namespace:FourRVivi.App.ViewModels"
+             x:Class="FourRVivi.App.Views.StatsView" x:DataType="vm:StatsViewModel">
+  <StackPanel Spacing="14">
+    <StackPanel Orientation="Horizontal" Spacing="12">
+      <TextBlock Text="Session stats" Classes="h1"/>
+      <Button Content="Reset" Command="{Binding ResetCommand}" VerticalAlignment="Center"/>
+    </StackPanel>
+    <WrapPanel>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="Elapsed" Classes="muted"/><TextBlock Text="{Binding Elapsed}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="Kills" Classes="muted"/><TextBlock Text="{Binding Kills}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="EXP / hour" Classes="muted"/><TextBlock Text="{Binding ExpPerHour}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="Zeny / hour" Classes="muted"/><TextBlock Text="{Binding ZenyPerHour}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="EXP gained" Classes="muted"/><TextBlock Text="{Binding ExpGained}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="Zeny gained" Classes="muted"/><TextBlock Text="{Binding ZenyGained}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="Profit / hour" Classes="muted"/><TextBlock Text="{Binding ProfitPerHour}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="Loot / hour" Classes="muted"/><TextBlock Text="{Binding LootPerHour}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="Loot count" Classes="muted"/><TextBlock Text="{Binding LootCount}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="Deaths" Classes="muted"/><TextBlock Text="{Binding Deaths}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="HP" Classes="muted"/><TextBlock Text="{Binding HpText}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="SP" Classes="muted"/><TextBlock Text="{Binding SpText}" FontSize="20"/></StackPanel></Border>
+      <Border Classes="card" Width="170" Margin="0,0,12,12"><StackPanel><TextBlock Text="Weight" Classes="muted"/><TextBlock Text="{Binding WeightText}" FontSize="20"/></StackPanel></Border>
+    </WrapPanel>
+    <TextBlock Classes="section" Text="EXP GAIN LOG"/>
+    <Border Classes="card" Padding="0">
+      <ListBox ItemsSource="{Binding ExpLog}" Background="Transparent" FontFamily="Consolas,monospace" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+    </Border>
+    <TextBlock Classes="muted" TextWrapping="Wrap" Text="HP/SP come from the OCR Reader's HP % Text and SP % Text markers. EXP, Zeny, and Weight can still use OCR marks or Scanner addresses. Kills come from the Smart Bot's EXP-gain proxy."/>
+  </StackPanel>
+</UserControl>
